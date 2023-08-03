@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import PORT from "../serverConfig";
 import axios from "axios";
 
-console.log(PORT);
-
 const getUserRepos = async (req: Request, res: Response) => {
   const { username } = req.params;
 
