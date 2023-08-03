@@ -1,10 +1,7 @@
 import express from "express";
-import githubUserController from "../controller/githubUserController";
+import githubUser from "./githubUserRoutes";
 
-const router = express.Router();
+const routes = express();
+routes.use(express.json(), githubUser);
 
-router.get("/users/:username/repos", githubUserController.getUserRepos);
-router.get("/users/:username/details", githubUserController.getUserDetails);
-router.get("/users", githubUserController.getUsersSinceId);
-
-export default router;
+export default routes;
