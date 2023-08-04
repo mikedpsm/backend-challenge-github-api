@@ -1,5 +1,5 @@
 import express from 'express';
-import githubUserController from '../controller/githubUserController';
+import githubUserController from '../controller/GithubUserController';
 
 const router = express.Router();
 
