@@ -38,6 +38,10 @@ const getUserDetails = async (req: Request, res: Response) => {
 
 const getUsersSinceId = async (req: Request, res: Response) => {
   const { since = 1, per_page = 30 } = req.query;
+  const parsedSince = Number(since);
+  if (Number.isNaN(parsedSince)) {
+    return res.status(400).send('Invalid query parameter. Please, use only numbers.');
+  }
 
   const requestData = await request.get("/users?since=" + since + "&per_page=" + per_page)
     .then(response => {
@@ -45,7 +49,7 @@ const getUsersSinceId = async (req: Request, res: Response) => {
     })
     .catch(error => { return res.send(error.message) });
 
-  res.status(200).json({
+  res.status(200).send({
     data: requestData,
     nextPage: `http://localhost:${PORT}/api/users?since=${Number(since) + Number(per_page)}`
   });
