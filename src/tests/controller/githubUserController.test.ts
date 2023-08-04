@@ -124,11 +124,12 @@ describe('GET /users?since={number}', () => {
   });
 
   it('Should return a \"next page\" link when using a valid query parameter', async () => {
+    const nextPageNumber = 8
     const data = await request(app)
       .get(`/api/users/`)
       .query({ since: 5, per_page: 3 });
 
-    expect(data.body.data[0].id).toEqual(6);
+    expect(data.body.nextPage).toEqual(`http://localhost:8080/api/users?since=${nextPageNumber}`);
   });
 
 });
