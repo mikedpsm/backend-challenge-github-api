@@ -14,21 +14,26 @@ const request = axios.create({
 const getUserRepos = async (req: Request, res: Response) => {
   const { username } = req.params;
 
-  const result = await request.get("/users/" + username + "/repos")
+  await request.get("/users/" + username + "/repos")
     .then(response => {
       return res.status(200).json(response.data)
     })
-    .catch(error => { return res.status(404).json({ message: "Invalid username. Please check it and try again." }) });
+    .catch(() => { return res.status(404).json({ message: "Invalid username. Please check it and try again." }) });
 }
 
 const getUserDetails = async (req: Request, res: Response) => {
   const { username } = req.params;
 
-  const returnValue = await request.get("/users/" + username)
+  await request.get("/users/" + username)
     .then(response => {
       return res.status(200).json(response.data);
     })
-    .catch(error => { return res.status(404).json(error.message) });
+    .catch(() => {
+      return res.status(404).json({
+        "message": "Not Found",
+        "documentation_url": "https://docs.github.com/rest/users/users#get-a-user"
+      })
+    });
 }
 
 const getUsersSinceId = async (req: Request, res: Response) => {
@@ -36,11 +41,11 @@ const getUsersSinceId = async (req: Request, res: Response) => {
 
   const requestData = await request.get("/users?since=" + since + "&per_page=" + per_page)
     .then(response => {
-      return response.data
+      return response.data;
     })
-    .catch(error => { return error.message });
+    .catch(error => { return res.send(error.message) });
 
-  res.json({
+  res.status(200).json({
     data: requestData,
     nextPage: `http://localhost:${PORT}/api/users?since=${Number(since) + Number(per_page)}`
   });

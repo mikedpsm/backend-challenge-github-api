@@ -18,8 +18,8 @@ afterEach(() => {
   server.close();
 })
 
-describe('GET /users/:username/repos', () => {
-  it.skip('Should return an array of repositories when a valid username is provided', async () => {
+describe.skip('GET /users/:username/repos', () => {
+  it('Should return an array of repositories when a valid username is provided', async () => {
     const amountOfRepos = 17;
 
     const data = await request(app)
@@ -30,22 +30,22 @@ describe('GET /users/:username/repos', () => {
     expect(data.body.length).toEqual(amountOfRepos);
   });
 
-  it.skip('Should return an error message when an invalid username is provided', async () => {
+  it('Should return an error message when an invalid username is provided', async () => {
     const data = await request(app)
       .get('/api/users/not-valid-name/repos')
-      .expect(404);
 
     expect(data.body).toStrictEqual({ message: 'Invalid username. Please check it and try again.' });
+    expect(data.status).toBe(404);
   });
 
-  it.skip('Should return a 200 status code when a request is successful', async () => {
+  it('Should return a 200 status code when a request is successful', async () => {
     const data = await request(app)
       .get(`/api/users/${username}/repos`);
 
     expect(data.statusCode).toBe(200);
   });
 
-  it.skip('Should return an empty array of repositories when a valid username with no public repositories is provided', async () => {
+  it('Should return an empty array of repositories when a valid username with no public repositories is provided', async () => {
     const amountOfRepos = 0;
 
     const data = await request(app)
@@ -57,6 +57,42 @@ describe('GET /users/:username/repos', () => {
   });
 });
 
-describe('GET /users/:username/repos', () => {
+describe.skip('GET /users/:username/details', () => {
+  it('Should return an user\'s details when a valid username is provided', async () => {
+    const data = await request(app)
+      .get(`/api/users/${username}/details`)
+      .expect('content-type', /json/)
+      .expect(200);
 
+    expect(data.body.id).toEqual(11251303);
+  });
+
+  it('Should return an error message when an invalid username is provided', async () => {
+    const data = await request(app)
+      .get('/api/users/mikedpsmx/details');
+
+    expect(data.body).toStrictEqual({
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/users/users#get-a-user"
+    });
+    expect(data.status).toBe(404);
+  });
+
+  it('Should return an error message when an empty username is provided', async () => {
+    const data = await request(app)
+      .get('/api/users/details');
+
+    expect(data.status).toBe(404);
+  });
+});
+
+describe.skip('GET /users?since={number}', () => {
+  it('Should return a list of users with the first having a specific id', async () => {
+    const data = await request(app)
+      .get(`/api/users/`)
+      .expect('content-type', /json/)
+      .expect(200);
+
+    expect(data.body.id).toEqual(11251303);
+  });
 });
