@@ -5,7 +5,7 @@ import axios from "axios";
 const request = axios.create({
   baseURL: "https://api.github.com",
   headers: {
-    'Authorization': "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",
+    'Authorization': process.env.TOKEN,
     'Accept': "application/vnd.github+json",
     'X-GitHub-Api-Version': '2022-11-28'
   }
